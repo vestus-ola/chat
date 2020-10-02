@@ -1,0 +1,47 @@
+{
+  "name": "chat",
+  "version": "1.0.0",
+  "description": "Socket.io chat",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon app.js",
+    "client": "cd ./client && npm run dev",
+    "start": "npm run dev && npm run client"
+  },
+  "devDependencies": {
+    "express": "4.17.1",
+    "socket.io": "2.3.0",
+    "nodemon": "2.0.2"
+  },
+  "dependencies": {
+    "@sendgrid/mail": "^7.0.1",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "1.19.0",
+    "cors": "2.8.5",
+    "dotenv": "^8.2.0",
+    "helmet": "3.22.0",
+    "jsonwebtoken": "^8.5.1",
+    "moment-timezone": "^0.5.28",
+    "multer": "^1.4.2",
+    "pg": "^8.0.3",
+    "pg-hstore": "^2.3.3",
+    "rand-token": "^1.0.1",
+    "sequelize": "^5.21.7",
+    "slug": "^2.1.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vestus-ola/chat.git"
+  },
+  "keywords": [
+    "chat",
+    "socket.io chat"
+  ],
+  "author": "Oyeleye Festus Olatunbosun",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vestus-ola/chat/issues"
+  },
+  "homepage": "https://github.com/vestus-ola/chat#readme"
+}

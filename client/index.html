@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" name="viewport">
+  <title>Chat Application</title>
+  <link rel="stylesheet" type="text/css" href="./static/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="./static/font-awesome/css/all.min.css">
+  <link rel="preload" href="./static/images/background_2.png" as="image">
+  <link rel="preload" href="./static/images/background_1.png" as="image">
+  <link rel="preload" href="https://cloud.githubusercontent.com/assets/398893/15136779/4e765036-1639-11e6-9201-67e728e86f39.jpg" as="image">
+
+  <!-- Google Font -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+  <!-- Material icons -->
+  <link rel="preload" href="https://fonts.googleapis.com/icon?family=Material+Icons" as="font">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<body>
+  <div id="app"></div>
+  <!-- built files will be auto injected -->
+</body>
+<script src="./static/jquery/dist/jquery.min.js"></script>
+<script src="./static/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue-chat-scroll/dist/vue-chat-scroll.min.js"></script>
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyDqmyaobgb_QdJFVi0keWvX93ThvD8rGvA",
+    authDomain: "webpush-4595e.firebaseapp.com",
+    databaseURL: "https://webpush-4595e.firebaseio.com",
+    projectId: "webpush-4595e",
+    storageBucket: "webpush-4595e.appspot.com",
+    messagingSenderId: "862248019299",
+    appId: "1:862248019299:web:16e02dc30485d69f405f56",
+    measurementId: "G-DZWHJX1WNN"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
+</html>
