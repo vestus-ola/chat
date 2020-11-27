@@ -38,35 +38,58 @@
         </div>
 
         <div class="list-group" v-else>
-          <div v-for="item in friends" :key="item.fullname" @click="goToChat(item)" class="list-group-item">
-            <div class="user-list">
-              <div class="avatar">
-                <img :src="item.image" v-if="item.image" alt="Avatar" />
-                <img src="@/assets/images/avatar.png" v-else alt="Avatar" />
+          <div v-if="skeletonLoader">
+            <div class="list-group-item" v-for="item in skeletonItem"
+              :key="item">
+              <div class="skeleton-list">
+                <div class="avatar animate-linear">
+                  <div class="avatar-circle"></div>
+                </div>
+                <div class="name">
+                  <span class="animate-linear"></span>
+                  <span class="message animate-linear"></span>
+                </div>
+                <div class="actions">
+                  <div class="notification"></div>
+                  <span class="time-block">
+                    <span v-text="' '" class="animate-linear"></span>
+                  </span>
+                </div>
               </div>
-              <div class="name">
-                <span>{{ item.fullname }}</span>
-                <span class="typing" v-if="item.user_typing">
-                  {{ item.user_typing }}
-                </span>
-                <span class="message" v-else>
-                  <span v-if="item.sender_id == info.id">
-                    <span class="tick" v-if="item.message_status == 'read'">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="16" id="msg-dblcheck-ack" x="2063" y="2076"><path d="M15.01 3.316l-.478-.372a.365.365 0 0 0-.51.063L8.666 9.88a.32.32 0 0 1-.484.032l-.358-.325a.32.32 0 0 0-.484.032l-.378.48a.418.418 0 0 0 .036.54l1.32 1.267a.32.32 0 0 0 .484-.034l6.272-8.048a.366.366 0 0 0-.064-.512zm-4.1 0l-.478-.372a.365.365 0 0 0-.51.063L4.566 9.88a.32.32 0 0 1-.484.032L1.892 7.77a.366.366 0 0 0-.516.005l-.423.433a.364.364 0 0 0 .006.514l3.255 3.185a.32.32 0 0 0 .484-.033l6.272-8.048a.365.365 0 0 0-.063-.51z" fill="#4fc3f7"/></svg>
-                    </span>
-                    <span class="tick" v-else><svg xmlns="http://www.w3.org/2000/svg" width="18" height="16" id="msg-dblcheck-ack" x="2063" y="2076"><path d="M15.01 3.316l-.478-.372a.365.365 0 0 0-.51.063L8.666 9.88a.32.32 0 0 1-.484.032l-.358-.325a.32.32 0 0 0-.484.032l-.378.48a.418.418 0 0 0 .036.54l1.32 1.267a.32.32 0 0 0 .484-.034l6.272-8.048a.366.366 0 0 0-.064-.512zm-4.1 0l-.478-.372a.365.365 0 0 0-.51.063L4.566 9.88a.32.32 0 0 1-.484.032L1.892 7.77a.366.366 0 0 0-.516.005l-.423.433a.364.364 0 0 0 .006.514l3.255 3.185a.32.32 0 0 0 .484-.033l6.272-8.048a.365.365 0 0 0-.063-.51z" fill="#777"/>
-                      </svg>
-                    </span>
-                    </span>
-                  {{ stringifyMessage(item.message) }}
-                </span>
-              </div>
-              <div class="actions">
-                <div class="notification"></div>
-                <span v-if="item.unread" v-text="item.unread" class="unread"></span>
-                <span class="time-block">
-                  <span v-text="convertTimeToHour(item.date)" :class="item.unread > 0 ? 'time-unread': 'time'"></span>
-                </span>
+            </div>
+          </div>
+
+          <div v-if="itemsLoaded">
+            <div v-for="item in friends" :key="item.fullname" @click="goToChat(item)" class="list-group-item">
+              <div class="user-list">
+                <div class="avatar">
+                  <img :src="item.image" v-if="item.image" alt="Avatar" />
+                  <img src="@/assets/images/avatar.png" v-else alt="Avatar" />
+                </div>
+                <div class="name">
+                  <span>{{ item.fullname }}</span>
+                  <span class="typing" v-if="item.user_typing">
+                    {{ item.user_typing }}
+                  </span>
+                  <span class="message" v-else>
+                    <span v-if="item.sender_id == info.id">
+                      <span class="tick" v-if="item.message_status == 'read'">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="16" id="msg-dblcheck-ack" x="2063" y="2076"><path d="M15.01 3.316l-.478-.372a.365.365 0 0 0-.51.063L8.666 9.88a.32.32 0 0 1-.484.032l-.358-.325a.32.32 0 0 0-.484.032l-.378.48a.418.418 0 0 0 .036.54l1.32 1.267a.32.32 0 0 0 .484-.034l6.272-8.048a.366.366 0 0 0-.064-.512zm-4.1 0l-.478-.372a.365.365 0 0 0-.51.063L4.566 9.88a.32.32 0 0 1-.484.032L1.892 7.77a.366.366 0 0 0-.516.005l-.423.433a.364.364 0 0 0 .006.514l3.255 3.185a.32.32 0 0 0 .484-.033l6.272-8.048a.365.365 0 0 0-.063-.51z" fill="#4fc3f7"/></svg>
+                      </span>
+                      <span class="tick" v-else><svg xmlns="http://www.w3.org/2000/svg" width="18" height="16" id="msg-dblcheck-ack" x="2063" y="2076"><path d="M15.01 3.316l-.478-.372a.365.365 0 0 0-.51.063L8.666 9.88a.32.32 0 0 1-.484.032l-.358-.325a.32.32 0 0 0-.484.032l-.378.48a.418.418 0 0 0 .036.54l1.32 1.267a.32.32 0 0 0 .484-.034l6.272-8.048a.366.366 0 0 0-.064-.512zm-4.1 0l-.478-.372a.365.365 0 0 0-.51.063L4.566 9.88a.32.32 0 0 1-.484.032L1.892 7.77a.366.366 0 0 0-.516.005l-.423.433a.364.364 0 0 0 .006.514l3.255 3.185a.32.32 0 0 0 .484-.033l6.272-8.048a.365.365 0 0 0-.063-.51z" fill="#777"/>
+                        </svg>
+                      </span>
+                      </span>
+                    {{ stringifyMessage(item.message) }}
+                  </span>
+                </div>
+                <div class="actions">
+                  <div class="notification"></div>
+                  <span v-if="item.unread" v-text="item.unread" class="unread"></span>
+                  <span class="time-block">
+                    <span v-text="convertTimeToHour(item.date)" :class="item.unread > 0 ? 'time-unread': 'time'"></span>
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -95,7 +118,10 @@ export default {
       messageColor: "#000",
       message: "",
       friends: [],
-      isLoading: true
+      isLoading: true,
+      itemsLoaded: false,
+      skeletonLoader: false,
+      skeletonItem: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     };
   },
   sockets: {
@@ -295,6 +321,7 @@ export default {
     },
     showChatLists() {
       let vm = this;
+      this.skeletonLoader = true;
       this.axios.get(`${url}/user/chat_lists`, {
         headers: {
           "Content-Type": "application/json",
@@ -306,12 +333,21 @@ export default {
           setTimeout(() => {
             vm.isLoading = false;
           }, 100);
+          setTimeout(() => {
+            vm.skeletonLoader = false;
+            vm.itemsLoaded = true;
+          }, vm.getRandomInt(1000, 5000))
         } else {
           notify.error(response.data.message);
         }
       }).catch(error => {
         notify.error(error.message);
       })
+    },
+    getRandomInt(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min + 1)) + min;
     }
   },
   mounted() {
@@ -333,7 +369,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .main-wrapper {
   font-family: "Helvetica Neue", Helvetica /*, sans-serif*/;
   margin: 0;
@@ -723,5 +759,151 @@ span.send-button {
 .message .tick-animation svg:last-child {
   -webkit-transform: perspective(800px) rotateY(-179.9deg);
           transform: perspective(800px) rotateY(-179.9deg);
+}
+
+/* skeleton loader animation */
+.skeleton-list {
+  height: 60px;
+  font-size: 24px;
+}
+.skeleton-list:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.skeleton-list div {
+  float: left;
+  transform: translateY(-50%);
+  position: relative;
+  top: 50%;
+}
+.skeleton-list .actions {
+  float: right;
+  text-align: center;
+  margin: 0 0 0 10px;
+}
+.skeleton-list .actions .time-block {
+  display: block;
+  font-size: 14px;
+  font-weight: 400;
+}
+.skeleton-list .avatar {
+  margin: 2px 2px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  width: 50px;
+  background-color: #dddbdd;
+}
+.skeleton-list .avatar div {
+  border-radius: 50%;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
+  display: block;
+  width: 50px;
+  height: 50px;
+  width: 100%;
+}
+.skeleton-list .name span {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  letter-spacing: 0.3px;
+  margin: 0 0 0 8px;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 50vw;
+  min-width: 20vw;
+  min-height: 14px;
+  width: 50px;
+  background-color: #dddbdd;
+  content: ' ';
+  margin-bottom: 5px;
+}
+.skeleton-list .name span.message {
+  display: block;
+  margin-top: 5px;
+  width: 80vw;
+  min-height: 12px;
+  background-color: #dddbdd;
+  content: ' ';
+}
+.skeleton-list .actions {
+  float: right;
+  text-align: center;
+  margin: 0 0 0 10px;
+}
+.skeleton-list .actions span {
+  display: block;
+  font-size: 14px;
+  font-weight: 400;
+  height: 14px;
+  width: 8vw;
+  background-color: #dddbdd;
+  content: ' ';
+}
+
+.animate-linear {
+  background: linear-gradient(-45deg, #DDDDDD, #F0F0F0, #DDDDDD, #F0F0F0);
+	background-size: 400% 400%;
+	-webkit-animation: Gradient 2.25s ease infinite;
+	-moz-animation: Gradient 2.25s ease infinite;
+	animation: Gradient 2.25s ease infinite;
+}
+
+@media only screen and (max-width: 450px) {
+  .skeleton-list .actions span {
+    width: 15vw;
+  }
+
+  .skeleton-list .name span.message {
+    width: 50vw;
+  }
+
+  .skeleton-list .name span {
+    width: 50px;
+  }
+}
+
+@keyframes pulse-bg {
+  0% { background-color: #ddd; }
+  50% { background-color: #d0d0d0; }
+  100% { background-color: #ddd; }
+}
+
+@-webkit-keyframes Gradient {
+	0% {
+		background-position: 0% 50%
+	}
+	50% {
+		background-position: 100% 50%
+	}
+	100% {
+		background-position: 0% 50%
+	}
+}
+
+@-moz-keyframes Gradient {
+	0% {
+		background-position: 0% 50%
+	}
+	50% {
+		background-position: 100% 50%
+	}
+	100% {
+		background-position: 0% 50%
+	}
+}
+
+@keyframes Gradient {
+	0% {
+		background-position: 0% 50%
+	}
+	50% {
+		background-position: 100% 50%
+	}
+	100% {
+		background-position: 0% 50%
+	}
 }
 </style>

@@ -13,7 +13,10 @@
             aria-haspopup="true"
             aria-expanded="false"
           >
-            <i class="glyphicon glyphicon-option-vertical" style="color: #fff;"></i>
+            <i
+              class="glyphicon glyphicon-option-vertical"
+              style="color: #fff"
+            ></i>
           </a>
           <ul class="dropdown-menu dropdown-menu-right">
             <li>
@@ -39,15 +42,20 @@
 
       <div class="list-group" v-else>
         <div v-if="skeletonLoader">
-          <div class="list-group-item" v-for="item in items"
-            :key="item">
+          <div class="list-group-item" v-for="item in skeletonItem" :key="item">
             <div class="skeleton-list">
-              <div class="avatar">
-                <img alt="im" src="@/assets/images/avatar.png" />
+              <div class="avatar animate-linear">
+                <div class="avatar-circle"></div>
               </div>
               <div class="name">
-                <span></span>
-                <span class="message"></span>
+                <span class="animate-linear"></span>
+                <span class="message animate-linear"></span>
+              </div>
+              <div class="actions">
+                <div class="notification"></div>
+                <span class="time-block">
+                  <span v-text="' '" class="animate-linear"></span>
+                </span>
               </div>
             </div>
           </div>
@@ -70,12 +78,17 @@
                 <span class="typing" v-if="item.user_typing">
                   {{ item.user_typing }}
                 </span>
-                <span class="message" v-else>{{ stringifyMessage(item.message) }}</span>
+                <span class="message" v-else>{{
+                  stringifyMessage(item.message)
+                }}</span>
               </div>
               <div class="actions">
                 <div class="notification"></div>
                 <span class="time-block">
-                  <span v-text="item.when" :class="item.unread > 0 ? 'time-unread': 'time'"></span>
+                  <span
+                    v-text="item.when"
+                    :class="item.unread > 0 ? 'time-unread' : 'time'"
+                  ></span>
                 </span>
               </div>
             </div>
@@ -98,7 +111,7 @@ import Loader from "@/components/Loader";
 export default {
   components: {
     NotificationComponent,
-    Loader
+    Loader,
   },
   data() {
     return {
@@ -108,7 +121,8 @@ export default {
       isLoading: true,
       groups: [],
       itemsLoaded: false,
-      skeletonLoader: false
+      skeletonLoader: false,
+      skeletonItem: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
     };
   },
   methods: {
@@ -130,63 +144,63 @@ export default {
           message: "Where are you?",
           unread: 0,
           when: this.convertTimeToHour("15:26"),
-          image: "/static/images/user_1.jpg"
+          image: "/static/images/user_1.jpg",
         },
         {
           group_name: "Jane Doe",
           message: ":thumbs_up: That's the point.",
           unread: 0,
           when: this.convertTimeToHour("08:12"),
-          image: "/static/images/user_2.jpg"
+          image: "/static/images/user_2.jpg",
         },
         {
           group_name: "McCarthy Roland",
           message: "When are you coming to work?",
           unread: 6,
           when: this.convertTimeToHour("12:26"),
-          image: "/static/images/user_3.jpg"
+          image: "/static/images/user_3.jpg",
         },
         {
           group_name: "Isabella Houston",
           message: "I will definately be there.",
           unread: 0,
           when: this.convertTimeToHour("13:00"),
-          image: "/static/images/user_4.jpg"
+          image: "/static/images/user_4.jpg",
         },
         {
           group_name: "Immanuella Mikel",
           message: "Wow! That's fine by me.",
           unread: 0,
           when: this.convertTimeToHour("09:21"),
-          image: "/static/images/user_5.jpg"
+          image: "/static/images/user_5.jpg",
         },
         {
           group_name: "Tribett John",
           message: "Will Real Madrid win this night?",
           unread: 1,
           when: this.convertTimeToHour("22:23"),
-          image: "/static/images/user_6.jpg"
+          image: "/static/images/user_6.jpg",
         },
         {
           group_name: "James Richard",
           message: "Where are you?",
           unread: 26,
           when: this.convertTimeToHour("12:01"),
-          image: "/static/images/user_7.jpg"
+          image: "/static/images/user_7.jpg",
         },
         {
           group_name: "Samuel Jackson",
           message: "Where are you?",
           unread: 1,
           when: this.convertTimeToHour("10:10"),
-          image: "/static/images/user_8.jpg"
+          image: "/static/images/user_8.jpg",
         },
         {
           group_name: "Jameel Xhadam",
           message: "Hey. Are you there?",
           unread: 12,
           when: this.convertTimeToHour("10:10"),
-          image: "/static/images/avatar.png"
+          image: "/static/images/avatar.png",
         }
       );
 
@@ -197,14 +211,14 @@ export default {
       setTimeout(() => {
         vm.skeletonLoader = false;
         vm.itemsLoaded = true;
-      }, vm.getRandomInt(1000,5000))
+      }, vm.getRandomInt(1000, 5000));
     },
     goToGroupChat(item) {
       this.$store.dispatch("setActiveGroup", {
         id: parseInt(item.group_id),
         image: item.image,
         group_name: item.group_name,
-        group_uuid: item.group_uuid
+        group_uuid: item.group_uuid,
       });
 
       this.$router.push("/user-group-chat");
@@ -215,44 +229,47 @@ export default {
       return new Intl.DateTimeFormat("en-US", {
         hour12: true,
         hour: "2-digit",
-        minute: "numeric"
+        minute: "numeric",
       }).format(parsedDate);
     },
     showGroupChatLists() {
       let vm = this;
-      this.axios.get(`${url}/user/group_lists`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: this.token
-        }
-      }).then(response => {
-        if (response.status == 200) {
-          this.groups = response.data.data;
-          setTimeout(() => {
-            vm.isLoading = false;
-          }, 100);
-        } else {
-          notify.error(response.data.message);
-        }
-      }).catch(error => {
-        notify.error(error.message);
-      })
+      this.axios
+        .get(`${url}/user/group_lists`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: this.token,
+          },
+        })
+        .then((response) => {
+          if (response.status == 200) {
+            this.groups = response.data.data;
+            setTimeout(() => {
+              vm.isLoading = false;
+            }, 100);
+          } else {
+            notify.error(response.data.message);
+          }
+        })
+        .catch((error) => {
+          notify.error(error.message);
+        });
     },
     getRandomInt(min, max) {
       min = Math.ceil(min);
       max = Math.floor(max);
       return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
+    },
   },
   mounted() {
     this.tempData();
   },
   computed: {
-    ...mapGetters(["token", "info"])
+    ...mapGetters(["token", "info"]),
   },
   beforeMount() {
     this.checkIfAuthenticated();
-  }
+  },
 };
 </script>
 
@@ -511,9 +528,9 @@ export default {
   height: 50px;
   border-radius: 50%;
   width: 50px;
-  animation: pulse-bg 1s infinite;
+  background-color: #dddbdd;
 }
-.skeleton-list .avatar img {
+.skeleton-list .avatar div {
   border-radius: 50%;
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
   display: block;
@@ -530,51 +547,104 @@ export default {
   margin: 0 0 0 8px;
   overflow: hidden;
   white-space: nowrap;
-  width: 30vw;
+  width: 50vw;
   min-width: 20vw;
   min-height: 14px;
   width: 50px;
-  animation: pulse-bg 1s infinite;
+  background-color: #dddbdd;
   content: ' ';
   margin-bottom: 5px;
 }
 .skeleton-list .name span.message {
-  /* display: block; */
   display: block;
-  /* font-size: 14px;
-  font-weight: 400; */
   margin-top: 5px;
-  /* text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap; */
-  min-width: 60vw;
+  width: 80vw;
   min-height: 12px;
-  width: 50px;
-  animation: pulse-bg 1s infinite;
+  background-color: #dddbdd;
+  content: ' ';
+}
+.skeleton-list .actions {
+  float: right;
+  text-align: center;
+  margin: 0 0 0 10px;
+}
+.skeleton-list .actions span {
+  display: block;
+  font-size: 14px;
+  font-weight: 400;
+  height: 14px;
+  width: 8vw;
+  background-color: #dddbdd;
   content: ' ';
 }
 
-@keyframes pulse-bg {
-  0% { background-color: #ddd; }
-  50% { background-color: #d0d0d0; }
-  100% { background-color: #ddd; }
+.animate-linear {
+  background: linear-gradient(-45deg, #DDDDDD, #F0F0F0, #DDDDDD, #F0F0F0);
+	background-size: 400% 400%;
+	-webkit-animation: Gradient 2.25s ease infinite;
+	-moz-animation: Gradient 2.25s ease infinite;
+	animation: Gradient 2.25s ease infinite;
 }
-@keyframes shimmer {
-  100% {
-    from{
-      transform: translateX(-100%);
-      background-image: linear-gradient(
-        90deg,
-        rgba(#fff, 0) 0,
-        rgba(#fff, 0.2) 20%,
-        rgba(#fff, 0.5) 60%,
-        rgba(#fff, 0)
-      );
-    }
-    to {
-      transform: translateX(100%);
 
-    }
+@media only screen and (max-width: 450px) {
+  .skeleton-list .actions span {
+    width: 15vw;
+  }
+
+  .skeleton-list .name span.message {
+    width: 50vw;
+  }
+
+  .skeleton-list .name span {
+    width: 50px;
+  }
+}
+
+@keyframes pulse-bg {
+  0% {
+    background-color: #ddd;
+  }
+  50% {
+    background-color: #d0d0d0;
+  }
+  100% {
+    background-color: #ddd;
+  }
+}
+
+@-webkit-keyframes Gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@-moz-keyframes Gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes Gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }
 </style>

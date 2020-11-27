@@ -6,6 +6,7 @@ module.exports = {
         test: /\.s[ac]ss$/i,
         use: [
           'style-loader',
+          'vue-style-loader',
           {
             loader: 'css-loader',
             options: {
@@ -16,6 +17,7 @@ module.exports = {
             loader: 'sass-loader',
             options: {
               sourceMap: true,
+
             },
           },
         ],
