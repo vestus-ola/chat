@@ -43,7 +43,7 @@
             :key="item">
             <div class="skeleton-list">
               <div class="avatar">
-                <img alt="im" />
+                <img alt="im" src="@/assets/images/avatar.png" />
               </div>
               <div class="name">
                 <span></span>
@@ -197,7 +197,7 @@ export default {
       setTimeout(() => {
         vm.skeletonLoader = false;
         vm.itemsLoaded = true;
-      }, 3000)
+      }, vm.getRandomInt(1000,5000))
     },
     goToGroupChat(item) {
       this.$store.dispatch("setActiveGroup", {
@@ -237,6 +237,11 @@ export default {
       }).catch(error => {
         notify.error(error.message);
       })
+    },
+    getRandomInt(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min + 1)) + min;
     }
   },
   mounted() {
