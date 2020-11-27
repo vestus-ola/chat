@@ -193,11 +193,11 @@ export default {
       let vm = this;
       setTimeout(() => {
         vm.isLoading = false;
-      }, 100);
+      }, 500);
       setTimeout(() => {
         vm.skeletonLoader = false;
         vm.itemsLoaded = true;
-      }, 2000)
+      }, 3000)
     },
     goToGroupChat(item) {
       this.$store.dispatch("setActiveGroup", {
