@@ -38,29 +38,46 @@
       </div>
 
       <div class="list-group" v-else>
-        <div
-          v-for="item in items"
-          :key="item.fullname"
-          @click="goToGroupChat"
-          class="list-group-item"
-        >
-          <div class="group-list">
-            <div class="avatar">
-              <img :src="item.image" v-if="item.image" alt="Avatar" />
-              <img src="@/assets/images/avatar.png" v-else alt="Avatar" />
+        <div v-if="skeletonLoader">
+          <div class="list-group-item" v-for="item in items"
+            :key="item">
+            <div class="skeleton-list">
+              <div class="avatar">
+                <img alt="im" />
+              </div>
+              <div class="name">
+                <span></span>
+                <span class="message"></span>
+              </div>
             </div>
-            <div class="name">
-              <span>{{ item.group_name }}</span>
-              <span class="typing" v-if="item.user_typing">
-                {{ item.user_typing }}
-              </span>
-              <span class="message" v-else>{{ stringifyMessage(item.message) }}</span>
-            </div>
-            <div class="actions">
-              <div class="notification"></div>
-              <span class="time-block">
-                <span v-text="item.when" :class="item.unread > 0 ? 'time-unread': 'time'"></span>
-              </span>
+          </div>
+        </div>
+
+        <div v-if="itemsLoaded">
+          <div
+            v-for="item in items"
+            :key="item.fullname"
+            @click="goToGroupChat"
+            class="list-group-item"
+          >
+            <div class="group-list">
+              <div class="avatar">
+                <img :src="item.image" v-if="item.image" alt="Avatar" />
+                <img src="@/assets/images/avatar.png" v-else alt="Avatar" />
+              </div>
+              <div class="name">
+                <span>{{ item.group_name }}</span>
+                <span class="typing" v-if="item.user_typing">
+                  {{ item.user_typing }}
+                </span>
+                <span class="message" v-else>{{ stringifyMessage(item.message) }}</span>
+              </div>
+              <div class="actions">
+                <div class="notification"></div>
+                <span class="time-block">
+                  <span v-text="item.when" :class="item.unread > 0 ? 'time-unread': 'time'"></span>
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -89,7 +106,9 @@ export default {
       message: "",
       items: [],
       isLoading: true,
-      groups: []
+      groups: [],
+      itemsLoaded: false,
+      skeletonLoader: false
     };
   },
   methods: {
@@ -104,6 +123,7 @@ export default {
     },
     tempData() {
       this.items = [];
+      this.skeletonLoader = true;
       this.items.push(
         {
           group_name: "Jonathan Doe",
@@ -174,6 +194,10 @@ export default {
       setTimeout(() => {
         vm.isLoading = false;
       }, 100);
+      setTimeout(() => {
+        vm.skeletonLoader = false;
+        vm.itemsLoaded = true;
+      }, 2000)
     },
     goToGroupChat(item) {
       this.$store.dispatch("setActiveGroup", {
@@ -447,6 +471,105 @@ export default {
   100% {
     margin-bottom: 0;
     opacity: 1;
+  }
+}
+
+/* skeleton loader animation */
+.skeleton-list {
+  height: 60px;
+  font-size: 24px;
+}
+.skeleton-list:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.skeleton-list div {
+  float: left;
+  transform: translateY(-50%);
+  position: relative;
+  top: 50%;
+}
+.skeleton-list .actions {
+  float: right;
+  text-align: center;
+  margin: 0 0 0 10px;
+}
+.skeleton-list .actions .time-block {
+  display: block;
+  font-size: 14px;
+  font-weight: 400;
+}
+.skeleton-list .avatar {
+  margin: 2px 2px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  width: 50px;
+  animation: pulse-bg 1s infinite;
+}
+.skeleton-list .avatar img {
+  border-radius: 50%;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
+  display: block;
+  width: 50px;
+  height: 50px;
+  width: 100%;
+}
+.skeleton-list .name span {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  letter-spacing: 0.3px;
+  margin: 0 0 0 8px;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 30vw;
+  min-width: 20vw;
+  min-height: 14px;
+  width: 50px;
+  animation: pulse-bg 1s infinite;
+  content: ' ';
+  margin-bottom: 5px;
+}
+.skeleton-list .name span.message {
+  /* display: block; */
+  display: block;
+  /* font-size: 14px;
+  font-weight: 400; */
+  margin-top: 5px;
+  /* text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap; */
+  min-width: 60vw;
+  min-height: 12px;
+  width: 50px;
+  animation: pulse-bg 1s infinite;
+  content: ' ';
+}
+
+@keyframes pulse-bg {
+  0% { background-color: #ddd; }
+  50% { background-color: #d0d0d0; }
+  100% { background-color: #ddd; }
+}
+@keyframes shimmer {
+  100% {
+    from{
+      transform: translateX(-100%);
+      background-image: linear-gradient(
+        90deg,
+        rgba(#fff, 0) 0,
+        rgba(#fff, 0.2) 20%,
+        rgba(#fff, 0.5) 60%,
+        rgba(#fff, 0)
+      );
+    }
+    to {
+      transform: translateX(100%);
+
+    }
   }
 }
 </style>
